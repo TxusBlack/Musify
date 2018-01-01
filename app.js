@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // Cargar rutas
+var user_routes = require('./routes/user');
 
 // Convertir a objetos JSON los datos que nos llegan por http
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -14,8 +15,7 @@ app.use(bodyParser.json());
 
 // Rutas base
 
-app.get('/', function (req, res) {
-    res.status(200).send({ message: 'Bueno, funciona :V' });
-});
+// Middleware para la api
+app.use('/api', user_routes);
 
 module.exports = app;
