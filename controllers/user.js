@@ -1,5 +1,10 @@
 'use strict'
 
+// Acceder a ficheros
+var fs = require('fs');
+// Acceder a los path de los archivos
+var path = require('path');
+
 var User = require('../models/user');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../services/jwt');
@@ -138,10 +143,26 @@ function uploadImage(req, res) {
 	}
 }
 
+function getImageFile(req, res) {
+	// Sacar de la bd el nombre de la imagen
+	var image_file = req.params.imageFile;
+	var path_file = './uploads/users/' + image_file;
+
+	// Comprobar si existe el fichero en el servidor
+	fs.exists(path_file, (exists) => {
+		if (exists) {
+			res.sendFile(path.resolve(path_file));
+		} else {
+			res.status(200).send({ message: 'No existe la imagen' });
+		}
+	});
+}
+
 module.exports = {
 	pruebas,
 	saveUser,
 	loginUser,
 	updateUser,
-	uploadImage
+	uploadImage,
+	getImageFile
 };
